@@ -1,0 +1,47 @@
+RewriteEngine On
+
+# --- Rediriger directement les URLs contenant /pages/ vers la version propre ---
+RewriteCond %{THE_REQUEST} \s/pages/([a-zA-Z0-9_-]+)(?:\.php)?\s [NC]
+RewriteRule ^pages/([a-zA-Z0-9_-]+)(?:\.php)?$ /$1 [R=301,L]
+
+# --- Réécrire les URLs propres vers /pages/nom.php (sans extension) ---
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/pages/$1.php -f
+RewriteRule ^([a-zA-Z0-9_-]+)$ pages/$1.php [L]
+
+# --- Réécrire les URLs propres vers /block/nom.php (sans extension) ---
+RewriteCond %{DOCUMENT_ROOT}/block/$1.php -f
+RewriteRule ^block/([a-zA-Z0-9_-]+)$ /block/$1.php [L]
+
+# --- Supprimer .php de l'URL propre ---
+RewriteCond %{THE_REQUEST} \s/([^\s]+)\.php[?\s] [NC]
+RewriteRule ^(.+)\.php$ /$1 [R=301,L]
+
+# --- Désactiver l'indexation des dossiers ---
+Options -Indexes
+
+# --- Bloquer l'accès aux fichiers sensibles ---
+<FilesMatch "\.(ini|log|sh|bak|inc|sql|config\.php|\.env|\.git|\.ht|composer\.json|composer\.lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# --- Bloquer les fichiers cachés (commençant par .) ---
+<Files ~ "^\.">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# --- Headers de sécurité ---
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- Limiter les méthodes HTTP ---
+<LimitExcept GET POST>
+    Deny from all
+</LimitExcept>

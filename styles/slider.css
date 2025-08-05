@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.wrapper{
+  display: flex;
+  max-width: 95%;
+  position: relative;
+  margin: 2em 2.5em 7em 2.5em;
+}
+.wrapper i{
+  display: none; /* Par défaut masqué */
+  top: 50%;
+  height: 44px;
+  width: 44px;
+  color: #343F4F;
+  cursor: pointer;
+  font-size: 1.15rem;
+  position: absolute;
+  text-align: center;
+  line-height: 44px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.1s linear;
+}
+.wrapper i:active{
+  transform: translateY(-50%) scale(0.9);
+}
+.wrapper i:hover{
+  background: #f2f2f2;
+}
+.wrapper i#left {
+  left: -22px;
+}
+
+.wrapper i#right {
+  right: -22px;
+}
+.wrapper .carousel{
+  font-size: 0px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+}
+.carousel.dragging{
+  cursor: grab;
+  scroll-behavior: auto;
+
+}
+.carousel.dragging img{
+  pointer-events: none;
+}
+.carousel img{
+  max-height: 347px;
+  max-width: 522px;
+  object-fit: contain;
+  user-select: none;
+  margin-left: 14px;
+  width: calc(100% / 3);
+}
+.carousel img:first-child{
+  margin-left: 0px;
+}
+
+/* Modifier la structure de la lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.lightbox.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Supprimer le transform translate et utiliser flex pour centrer */
+.lightbox img {
+  max-width: 75%;
+  max-height: 75vh;
+  object-fit: contain;
+  pointer-events: auto;
+}
+
+/* Seulement pour les images en transition */
+.lightbox img.transitioning {
+  position: absolute;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.lightbox-close {
+  top: 20px;
+  right: 20px;
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 10px;
+  position: fixed;
+  z-index: 1000;
+}
+
+.lightbox .lightbox-prev,
+.lightbox .lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+  z-index: 2;
+}
+
+.lightbox .lightbox-prev:active,
+.lightbox .lightbox-next:active {
+  transform: translateY(-50%) scale(0.9);
+  color: #9b9b9b;
+}
+
+.lightbox .lightbox-prev:hover,
+.lightbox .lightbox-next:hover {
+  color: #c4c4c4;
+}
+
+.lightbox .lightbox-prev {
+  left: 20px;
+}
+
+.lightbox .lightbox-next {
+  right: 20px;
+}
+
+@media screen and (min-width: 900px) {
+  .scroll-indicators {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .carousel img{
+    width: calc(100% / 2);
+  }
+  .wrapper{
+    margin: 2em 0 7em 1.2em;
+    display: flex;
+    flex-direction: column;
+  }
+  .scroll-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+  }
+
+  .scroll-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: background-color 0.3s ease;
+  }
+
+  .scroll-indicator.active {
+    background: #ffffff;
+  }
+  .wrapper i {
+    display: none !important; /* Ajout de !important pour surcharger Font Awesome */
+  }
+}
+
+/* Cacher le carousel sur desktop et montrer la grille */
+@media screen and (min-width: 769px) {
+  .wrapper {
+      display: none; /* Cache le slider sur desktop */
+  }
+  
+  .desktop-grid {
+      display: block; /* Montre la grille sur desktop */
+  }
+}
+
+@media screen and (max-width: 768px) {
+    .carousel {
+        position: relative; /* Important pour le positionnement absolu des clones */
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        overflow: hidden;
+    }
+    
+    .carousel.dragging {
+        cursor: grabbing;
+    }
+    
+    .carousel img {
+        position: relative; /* Pour permettre le z-index */
+        transition: transform 0.3s ease-out;
+        will-change: transform; /* Optimisation des performances */
+    }
+
+    /* Style pour les images clonées pendant la transition */
+    .carousel img.clone {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        z-index: 2;
+    }
+
+    /* Désactiver le scroll-snap car nous gérons manuellement les transitions */
+    .carousel {
+        scroll-snap-type: none;
+    }
+
+    /* Styles pour la lightbox */
+    .lightbox .lightbox-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox.dragging img {
+        pointer-events: none;
+    }
+
+    .lightbox.dragging img {
+        transition: none;
+    }
+    .carousel {
+      position: relative;
+      overflow: hidden;
+    }
+  
+  .carousel img {
+      position: relative;
+      transition: transform 0.3s ease-out;
+    }
+  .wrapper {
+    display: flex; /* Montre le slider sur mobile */
+    }
+
+.desktop-grid {
+    display: none; /* Cache la grille sur mobile */
+    }
+}
+
+@media screen and (max-width: 550px) {
+  .carousel img{
+    width: 100%;
+  }
+  .wrapper{
+    margin: 2em 0 7em 0.6em;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lightbox .lightbox-prev,
+.lightbox .lightbox-next {
+  font-size: 1rem;
+  padding: 15px;
+  }
+}
