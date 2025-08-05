@@ -1,8 +1,13 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();?>
 
+if (isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false)) {
+
+    require_once __DIR__ . '/../vendor/autoload.php';
+    
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+    $dotenv->load();
+}
+?>
 <head>
     <title>Jacques Page - Photograhie</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
