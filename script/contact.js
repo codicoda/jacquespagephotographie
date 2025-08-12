@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const formData = new FormData(form);
        
-        fetch('script/send', {
+        fetch('/script/send', {
             method: 'POST',
             body: formData
         })
