@@ -9,6 +9,10 @@ function sanitize($data) {
     return htmlspecialchars(trim($data));
 }
 
+if (empty($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'jacquespagephotographie.fr') === false) {
+    die("Accès non autorisé.");
+}
+
 $nom = isset($_POST['nom']) ? sanitize($_POST['nom']) : '';
 $email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) : '';
 $message = isset($_POST['message']) ? sanitize($_POST['message']) : '';
